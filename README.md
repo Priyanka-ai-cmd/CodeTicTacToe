@@ -1,6 +1,8 @@
 # CodeTicTacToe
 public class Game{
+
     private Board board;
+	
     private List<Player> players;
     private Player winner;
     private int nextPlayerIndex;
