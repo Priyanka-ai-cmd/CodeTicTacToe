@@ -19,6 +19,7 @@ public class Board{
 }
 
 public abstract class Player{
+
     private int id;
     private PlayerType playerType;
     private String name;
@@ -27,6 +28,7 @@ public abstract class Player{
 }
 
 public class BotPlayer extends Player{
+
     private BotDifficultyLevel botDifficultyLevel;
 }
 
@@ -756,4 +758,5 @@ public class Game{
     public void makeMove(){
         
     }
+
 
