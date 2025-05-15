@@ -13,6 +13,7 @@ public class Game{
 }
 
 public class Board{
+
     private int size;
     private List<List<Cell>> grid;
 }
