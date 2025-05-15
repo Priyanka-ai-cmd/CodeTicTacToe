@@ -73,14 +73,165 @@ public class Game{
           Move move = currentPlayer.makeMove(board);
     }
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//now in the makeMove() method, write if validation checks fails, throw exception 
+
+public class game{
+
+    public void makeMove(){
+        Player currentPlayer = players.get(nextPlayerIndex);
+        System.out.println("It's" + currentPlayer.getName() + "'s turn. Please make a move");
+        Move move = currentPlayer.makeMove(board);
+        
+        if(!validateMove(move)){
+            throw new RuntimeException("Invalid move! Please try again");
+        }
+    }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//this exception will be handled by gameController
+//put a try catch inside makeMove()
+
+public class GameController{
+    public void makeMove(Game game){
+        try{
+            game.makeMove();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+// in the Controller, we are catching the exception
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Now next is to update the board and nextPlayerIndex
+
+public class Game{
+
+    public void makeMove(){
+        Player currentPlayer = players.get(nextPlayerIndex);
+        System.out.println("It's" + currentPlayer.getName() + "'s turn. Please make a move");
+        Move move = currentPlayer.makeMove(board);
+         
+        if(!validateMove(move)){
+            throw new RuntimeException("Invalid move! Please try again");
+        }
+        
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
+        
+        Cell cell = board.getGrid().get(row).get(col);
+        cell.setCellState(CellState.FILLED);
+        cell.setSymbol(currentPlayer.getSymbol());
+    
+        nextPlayerIndex +=1;
+        nextPlayerIndex %= players.size();
+
+        move.setCell(cell);
+        moves.add(move);
+        
+    }
+
+//updating the nextPlayerIndex -> incrementing -> nextPlayerIndex +=1;
+//your nextPlayerIndex should come back at 0th index when all the person's turn get over -> so we need to take mod -> nextPlayerIndex %= player.size();
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//now whatever move we have created we have to add that move into the list of move also -> move.setCell(cell);
+//but before that update the move with actual cell
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//after every move we need to update the state of the game by checking if winner is there or not
+
+public class Game{
+
+        public boolean checWinner(){
+        public void makeMove{
+                //update the state of the game
+                
+                if(checkWinner(move)){
+                    setWinner(currentPlayer);
+                    setGameState(GameState.SUCCESS);
+                } else if(moves.size() == board.getSize() * board.getSize()){
+                    setWinner(null);
+                    setGameState(GameState.DRAW);
+            
+                }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//one by one we need to check all the strategies which are there, and if any strategy gives true, that means you have a winner
+
+public class Game{
+
+    public boolean checkWinner(Move move){
+        for(WinningStrategy winningStrategy : winningStrategies){
+            if(winningStrategy.checkWinner(board, move)){
+                return true;
+            }
+        }
+        return false;
+    }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//lets add strategy inside client
+public class Client {
+
+    public static void main(String[] args) {
+        GameController gameController = new GameController();
+        
+        List<WinningStrategy> winningStrategies = new ArrayList<>();
+        winningStrategies.add(new RowWinningStrategy());
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//define makeMove inside BotPlayer since one of the player is bot
+
+public class BotPlayer extends Player{
+    private BotDifficultyLevel botDifficultyLevel;
+    private BotPlayingStrategy botPlayingStrategy;
+
+    @Override
+    public Move makeMove(Board board){
+        return botPlayingStrategy.makeMove(board, this );
+    }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//changing 'void return type'inside EasyBotPlayingStrategy to Move
+
+public class EasyBotPlayingStrategy implements BotPlayingStrategy{
+
+    @Override
+    public void makeMove(Board board, Player player) {
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// and changing 'void' inside interface BotPlayingStrategy to Move
 
 
+    public interface BotPlayingStrategy {
+    Move makeMove(Board board, Player player);
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Creating Exceptions coz something happened and our exception was not been captured
 
+public class InvalidMoveException extends Exception{
+    public InvalidMoveException(String message){
+        super(message);
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Appying this in Game class
 
+   public void makeMove() throws InvalidMoveException{
+         
+        if(!validateMove(move)){
+            throw new InvalidMoveException("Invalid move! Please try again!");
+        }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// now in gameController
 
+public class gameController
 
-
+    public void makeMove(Game game){
+        try{
+            game.makeMove();
+        }catch(InvalidMoveException e){
+            System.out.println(e.getMessage());
+        }catch (Exception e){
+            System.out.println(e.getStackTrace());
+        }
+    }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
