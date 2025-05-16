@@ -260,6 +260,8 @@ public void undo(Game game){
         game.undo();
 }
 
+------------------------------------------------------------------------------------------------------------------------------------
+
 //since there is no undo function in the game, so lets go and define undo
 public class Game{
 
@@ -279,3 +281,41 @@ public class Game{
 //        (a -b) % n = (a - b + n) % n
         nextPlayerIndex = (nextPlayerIndex -1 + players.size()) % players.size();
     }
+    
+------------------------------------------------------------------------------------------------------------------------------------
+
+//We need to handle Undo by removing cell (undo) values from HashMap -> decrease the frequency of teh HashMap
+
+public WinningStrategy{
+
+    void handleUndo(Board board, Move move); 
+}
+------------------------------------------------------------------------------------------------------------------------------------
+
+public RowWinningStrategy{
+
+@Override
+    public void handleUndo(Board board, Move move){
+        int row = move.getCell().getRow();
+        Symbol symbol = move.getCell().getSymbol();
+        
+        rowCount.get(row).put(symbol.getCharSymbol(), rowCount.get(row).get(symbol.getCharSymbol()) -1 );
+    }
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+public class Game{
+
+   public void makeMove() throws InvalidMoveException{
+        
+//        nextPlayerIndex -=1;
+//        (a -b) % n = (a - b + n) % n
+        nextPlayerIndex = (nextPlayerIndex -1 + players.size()) % players.size();
+        
+        for(WinningStrategy winningStrategy : winningStrategies){
+            winningStrategy.handleUndo(board, lastMove);
+        }
+    }
+------------------------------------------------------------------------------------------------------------------------------------
+
+  
