@@ -201,7 +201,7 @@ public class EasyBotPlayingStrategy implements BotPlayingStrategy{
     Move makeMove(Board board, Player player);
 }
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Creating Exceptions coz something happened and our exception was not been captured
+//Creating Exceptions package coz something happened and our exception was not been captured
 
 public class InvalidMoveException extends Exception{
     public InvalidMoveException(String message){
@@ -232,7 +232,50 @@ public class gameController
         }
     }
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Implementing Undo() method
 
+//Under Client()
 
+public class Client{
+        private static Scanner scanner = new Scanner(System.in);
+        public static void main(String[] args){
+        
+                while(gameController.checkState(game).equals(GameState.IN_PROGRESS)){
+                    gameController.makeMove(game);
+                    gameController.display(game);
+            
+                    System.out.println("Do you want to Undo [Y/N]");
+                    String undoResponse = scanner.nextLine();
+                    if(undoResponse.equals("Y")){
+                        gameController.undo(game);
+                        System.out.println("Undo is successful");
+                        gameController.display(game);
+                    }        
+            
+                }
+------------------------------------------------------------------------------------------------------------------------------------
+//Under GameController()        
 
+public void undo(Game game){
+        game.undo();
+}
 
+//since there is no undo function in the game, so lets go and define undo
+public class Game{
+
+        public void undo(){
+        if(moves.isEmpty()){
+            System.out.println("No moves present. Can't Undo");
+            return;
+        }
+        Move lastMove = moves.get(moves.size()-1);
+        moves.remove(moves.size()-1);
+        
+        Cell cell = lastMove.getCell();
+        cell.setCellState(CellState.EMPTY);     //Setting last cellState to be EMPTY
+        cell.setSymbol(null);
+        
+//        nextPlayerIndex -=1;
+//        (a -b) % n = (a - b + n) % n
+        nextPlayerIndex = (nextPlayerIndex -1 + players.size()) % players.size();
+    }
