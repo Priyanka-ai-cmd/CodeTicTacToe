@@ -32,15 +32,18 @@ public class BotPlayer extends Player{
     private BotDifficultyLevel botDifficultyLevel;
 }
 
-public class HumanPlayer extends Player{    
+public class HumanPlayer extends Player{  
+
 }
 
 public class Move{
+
     private Cell cell;
     private Player player;
 }
 
 public class Cell {
+
     private int row;
     private int col;
     private CellState cellState;
@@ -48,27 +51,32 @@ public class Cell {
 }
 
 public enum BotDifficultyLevel {
+
     EASY,
     MEDIUM,
     HARD
     
 }
 public enum CellState {
+
     EMPTY,
     FILLED
 }
 
 public enum GameState {
+
     IN_PROGRESS,
     DRAW,
     SUCCESS 
 }
 
 public enum PlayerType {
+
      HUMAN,
      BOT    
 }
 public class Symbol {
+
     private char charSymbol;
     private String color;
 }
@@ -76,6 +84,7 @@ public class Symbol {
 //Now come to the Client, so Client will be interacting with GameController so we need a GameController object.
 public class Client {
     public static void main(String[] args) {
+    
         GameController gameController = new GameController;
     }
 }
@@ -84,6 +93,7 @@ public class Client {
 //So controller will definitely have a method called start game
 
 public class GameController {
+
     public void startGame(){
         
     }
@@ -93,6 +103,7 @@ public class GameController {
 //Again client may ask to check the state also -> checkState and so on
 
 public class GameController {
+
     public void startGame(){
         
     }
@@ -118,6 +129,7 @@ public class GameController {
 //Then you go to the client, and command GameController to start the game 
 
 public class Client {
+
     public static void main(String[] args) {
         GameController gameController = new GameController();        
         gameController.startGame();
@@ -129,24 +141,28 @@ public class Client {
 //Right now checkStatus is not returning anything so we change the return type from void to game.
 // So go to the GameController 
 public class GameController {
+
     private Game game;
     
     public void startGame(){
         this.game = new Game();
     }
     public void display(){
+
         
     }
     public void makeMove(){
         
     }
     public GameState checkState(){
+    
         return GameState.IN_PROGRESS;
     }
     public void undo(){
         
     }
     public Player getWinner(){
+    
         return null;
     }
 
@@ -154,6 +170,7 @@ public class GameController {
 //Now go to the CLient -> while(gameController.checkState().equals(GameState.IN_PROGRESS)) -> if gamestate is in progress -> keep playing the game
 public class Client {
     public static void main(String[] args) {
+    
         GameController gameController = new GameController();
         gameController.startGame();
         gameController.display();
@@ -169,6 +186,7 @@ public class Client {
 public class Client {
 
     public static void main(String[] args) {
+    
         GameController gameController = new GameController();
         
         gameController.startGame();
@@ -190,6 +208,7 @@ public class Client {
 //we are supposed to have only one object of game controller
 
   public class GameController {
+  
     //private Game game;
     
     public Game startGame(){
@@ -232,6 +251,7 @@ public class Client {
 //Now modify all the return types of methods in gameController
 
 public class GameController {
+
     public Game startGame(){
         return new Game(); 
     }
@@ -275,12 +295,14 @@ public class GameController {
             players.add(new Player());
 ..........................................................................................................
 public abstract class Player {
+
     private int id;
     private PlayerType playerType;
     private String name;
     private Symbol symbol;
 
     public Player(int id, PlayerType playerType, String name, Symbol symbol){
+    
         this.id = id;
         this.playerType = playerType;
         this.name = name;
@@ -310,6 +332,7 @@ public class HumanPlayer extends Player{
 //Since these attributes are private (declared inside Player class) we cannot access here inside HumanPlayer
 
 public abstract class Player {
+
     private int id;
     private PlayerType playerType;
     private String name;
@@ -319,12 +342,14 @@ public abstract class Player {
 //so HumanPlayer will call this super constructor
 
 public class HumanPlayer extends Player{
+
     public HumanPlayer(int id, PlayerType playerType, String name, Symbol symbol){
        super(id, playerType, name, symbol); 
     }
 }
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 public class Client {
+
     public static void main(String[] args) {
         GameController gameController = new GameController();
 
@@ -346,6 +371,7 @@ public class Client {
 //Now modify BotPlayer class
 
 public class BotPlayer extends Player{
+
     private BotDifficultyLevel botDifficultyLevel;
 
     public BotPlayer(int id, PlayerType playerType, String name, Symbol symbol, BotDifficultyLevel botDifficultyLevel){
@@ -370,6 +396,7 @@ public class Client {
 //Before that we will create List of WinningStrategy
 
 public class Client {
+
     public static void main(String[] args) {
         GameController gameController = new GameController();
 
@@ -387,6 +414,7 @@ public class Client {
 //In builder, we donot want to create all attribute, only those attributes which we need for creation of object -> supply to client
 .........................................................................................................................................
 public class Game {
+
     public static class Builder{
         private int dimension;
         private List<Player> players;
@@ -416,6 +444,7 @@ public class Game {
 //Make the getBuilder method static
 
 public class Game{
+
     public static Builder getBuilder(){
         return new Builder();
     }
@@ -447,6 +476,7 @@ public class GameController {
 //lets say tomorrow you want to add a new player, you can add a new player
 
 public class Game {
+
    public static class Builder{
           private int dimension;
           private List<Player> players;
@@ -460,6 +490,7 @@ public class Game {
 //and in Game Controller
 
 public class GameController {    
+
     public Game startGame(int dimension, List<Player> players,List<WinningStrategy> winningStrategies){
         return Game
                 .getBuilder()
@@ -478,6 +509,7 @@ public class GameController {
 //3. Every player should have separate symbol
 
 public class Game {
+
    public static class Builder{
         public void validate(){
             if(players.size() != dimension-1){
@@ -499,6 +531,7 @@ public class Game {
         this.gameState = GameState.IN_PROGRESS;
     }
    public static class Builder{
+   
         public Game build(){
             validate();
             return new Game(this);
@@ -506,6 +539,7 @@ public class Game {
 //SO over here when Game will be called, a new board will be created -> this.board = new Board();
 //So passing the dimension inside the board
     private Game(Builder builder){
+    
         this.board = new Board(builder.dimension);
         this.players = builder.players;
         this.winningStrategies = builder.winningStrategies;
@@ -539,6 +573,7 @@ public class Board {
 //Now in cell we might need certain things so lets create a constructor of cell also in cell class.
 
 public class Cell {
+
     public Cell(int row, int col){
         this.row = row;
         this.col = col;
@@ -550,6 +585,7 @@ public class Cell {
 //Now go to the board
 
 public class Board {
+
     public Board(int size){
          this.size = size;
          this.grid = new ArrayList<>();
@@ -565,6 +601,7 @@ public class Board {
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Now lets create a constructor for classes which donot have a constructor
 public class Move {
+
     private Cell cell;
     private Player player;
 
@@ -643,6 +680,7 @@ public class GameController{
 //Now designing a strategy by which BotDifficultyLevel -> is made EASY -> we will use Factory Pattern
 
 public class BotPlayingStrategyFactory {
+
     public static BotPlayingStrategy getBotPlayingStrategy(BotDifficultyLevel botDifficultyLevel){
         if(botDifficultyLevel.equals(BotDifficultyLevel.EASY)){
             return new EasyBotPlayingStrategy();
@@ -658,6 +696,7 @@ public class BotPlayingStrategyFactory {
 //create BotPlayingStrategy object also here
 
 public class BotPlayer extends Player{
+
     private BotDifficultyLevel botDifficultyLevel;
     private BotPlayingStrategy botPlayingStrategy;
 
