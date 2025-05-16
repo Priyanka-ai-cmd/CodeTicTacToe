@@ -297,7 +297,7 @@ public RowWinningStrategy{
 @Override
     public void handleUndo(Board board, Move move){
         int row = move.getCell().getRow();
-        Symbol symbol = move.getCell().getSymbol();
+        Symbol symbol = move.getPlayer().getSymbol();
         
         rowCount.get(row).put(symbol.getCharSymbol(), rowCount.get(row).get(symbol.getCharSymbol()) -1 );
     }
@@ -317,5 +317,17 @@ public class Game{
         }
     }
 ------------------------------------------------------------------------------------------------------------------------------------
+//Now we need to update the state of the game
 
+public class Game{
+    public void undo(){
+        
+        for(WinningStrategy winningStrategy : winningStrategies){
+            winningStrategy.handleUndo(board, lastMove);
+        }
+        
+        setWinner(null);
+        setGameState(GameState.IN_PROGRESS);
+    }
+    
   
